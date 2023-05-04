@@ -1,0 +1,53 @@
+from sklearn.datasets import load_iris
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+iris = load_iris()
+
+X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3)
+
+
+gnb = GaussianNB()
+gnb.fit(X_train, y_train)
+
+
+y_pred = gnb.predict(X_test)
+
+
+accuracy = accuracy_score(y_test, y_pred)
+
+
+print("Accuracy:", accuracy)
+Accuracy: 0.9333333333333333
+import pandas as pd
+
+
+data = {'Outlook': ['Rainy', 'Sunny', 'Overcast', 'Overcast', 'Sunny', 'Rainy', 'Sunny', 'Overcast', 'Rainy', 'Sunny','Sunny','Rainy','Sunny','Overcast'],
+'Play': ['Yes', 'Yes', 'Yes', 'Yes', 'No', 'Yes', 'Yes', 'Yes', 'No', 'No', 'Yes', 'No', 'Yes', 'Yes']}
+df = pd.DataFrame(data)
+
+
+total_rows = df.shape[0]
+total_play = df[df['Play'] == 'Yes'].shape[0]
+total_not_play = df[df['Play'] == 'No'].shape[0]
+total_sunny = df[df['Outlook'] == 'Sunny'].shape[0]
+prob_play = total_play / total_rows
+prob_not_play = total_not_play / total_rows
+prob_sunny = total_sunny / total_rows
+prob_play_given_sunny = (df[(df['Outlook'] == 'Sunny') & (df['Play'] == 'Yes')].shape[0]) / total_sunny
+prob_not_play_given_sunny = (df[(df['Outlook'] == 'Sunny') & (df['Play'] == 'No')].shape[0]) / total_sunny
+
+
+print(f"Probability of playing on a sunny day: {prob_play_given_sunny:.2f}")
+print(f"Probability of not playing on a sunny day: {prob_not_play_given_sunny:.2f}")
+
+
+can_play_golf = prob_play_given_sunny / prob_play
+cannot_play_golf = prob_not_play_given_sunny / prob_not_play
+
+
+if can_play_golf > cannot_play_golf:
+  print("The boy can play golf on a sunny day!")
+else:
+  print("The boy cannot play golf on a sunny day.")
